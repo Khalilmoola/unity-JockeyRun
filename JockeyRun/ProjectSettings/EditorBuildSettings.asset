@@ -5,7 +5,33 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Scenes/SampleScene.scene
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Main Menu.scene
+    guid: ca60add783dd04f8fa15925813d124c2
+  - enabled: 1
+    path: Assets/Scenes/Map Menu.scene
+    guid: 977c03f027a3f4a0aac81eb91d0062ef
+  - enabled: 1
+    path: Assets/Scenes/Central Map.scene
+    guid: 8730e2b9910554d9e8a9575f9489a395
+  - enabled: 1
+    path: Assets/Scenes/TST Map.scene
+    guid: c6a8dc70e11f94f8a8364ab7fb921e3d
+  - enabled: 1
+    path: Assets/Scenes/Mong Kok Map.scene
+    guid: 1b9408eb7a4f94e4799844499483791f
+  m_BuildProfiles: []
   m_configObjects: {}
+  m_SlimFeaturesWeixinMiniGame:
+    ACLDecompression: 0
+    AllocateOverhead: 1
+    DecompressASTC: 0
+    DecompressDXT: 0
+    DecompressETC: 1
+    FreeTypeSfntPng: 1
+    LightProbe: 2
+    RootMotion: 0
+    UseStringInternPool: 2
