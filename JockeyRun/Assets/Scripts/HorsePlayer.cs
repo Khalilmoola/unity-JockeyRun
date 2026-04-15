@@ -7,7 +7,16 @@ public class HorsePlayer : MonoBehaviour
     public int maxJumps = 3;
     public bool canMove = false;
 
+    public int maxHealth = 3;
+    public float damageInvulnerabilitySeconds = 0.75f;
+
     private int jumpsRemaining;
+    private int currentHealth;
+    private float invulnerableUntilTime;
+    private bool shieldActive;
+    private float shieldUntilTime;
+    private float speedMultiplier = 1f;
+    private float speedMultiplierUntilTime = 0f;
     private Rigidbody2D rb;
     private BoxCollider2D col;
     private Vector2 originalColliderSize;
@@ -18,13 +27,27 @@ public class HorsePlayer : MonoBehaviour
         col = GetComponent<BoxCollider2D>();
         originalColliderSize = col.size;
         jumpsRemaining = maxJumps;
+        currentHealth = maxHealth;
+        invulnerableUntilTime = 0f;
+        shieldActive = false;
+        shieldUntilTime = 0f;
     }
 
     void Update()
     {
         if (!canMove) { rb.velocity = new Vector2(0, rb.velocity.y); return; }
 
-        rb.velocity = new Vector2(moveSpeed, rb.velocity.y);
+        if (shieldActive && Time.time >= shieldUntilTime)
+        {
+            shieldActive = false;
+        }
+
+        if (speedMultiplier != 1f && Time.time >= speedMultiplierUntilTime)
+        {
+            speedMultiplier = 1f;
+        }
+
+        rb.velocity = new Vector2(moveSpeed * speedMultiplier, rb.velocity.y);
 
         if (Input.GetKeyDown(KeyCode.Space) && jumpsRemaining > 0)
         {
@@ -42,6 +65,48 @@ public class HorsePlayer : MonoBehaviour
             col.size = originalColliderSize;
         }
     }
+
+    public void TakeDamage(int amount)
+    {
+        if (amount <= 0) return;
+        if (shieldActive) return;
+        if (Time.time < invulnerableUntilTime) return;
+
+        currentHealth -= amount;
+        invulnerableUntilTime = Time.time + damageInvulnerabilitySeconds;
+
+        if (currentHealth <= 0)
+        {
+            currentHealth = 0;
+            canMove = false;
+        }
+    }
+
+    public void Heal(int amount)
+    {
+        if (amount <= 0) return;
+        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+    }
+
+    public void ApplySpeedMultiplier(float multiplier, float durationSeconds)
+    {
+        if (durationSeconds <= 0f) return;
+
+        speedMultiplier = Mathf.Clamp(multiplier, 0.05f, 5f);
+        speedMultiplierUntilTime = Time.time + durationSeconds;
+    }
+
+    public void ApplyShield(float durationSeconds)
+    {
+        if (durationSeconds <= 0f) return;
+
+        shieldActive = true;
+        shieldUntilTime = Mathf.Max(shieldUntilTime, Time.time + durationSeconds);
+    }
+
+    public bool IsShieldActive() => shieldActive;
+
+    public int GetCurrentHealth() => currentHealth;
 
     private void OnCollisionEnter2D(Collision2D collision)
     {

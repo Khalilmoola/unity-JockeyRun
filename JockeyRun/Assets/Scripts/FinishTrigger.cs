@@ -4,9 +4,12 @@ public class FinishTrigger : MonoBehaviour
 {
     private void OnTriggerEnter2D(Collider2D other)
     {
-        if (other.CompareTag("Player"))
+        RaceResultsManager results = FindObjectOfType<RaceResultsManager>();
+        if (results == null) return;
+
+        if (other.GetComponent<HorsePlayer>() != null || other.GetComponent<HorseAIRacer>() != null)
         {
-            FindObjectOfType<RaceManager>().FinishRace();
+            results.RegisterFinish(other.gameObject);
         }
     }
 }
