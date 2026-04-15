@@ -8,9 +8,12 @@ public class RaceManager : MonoBehaviour
     public TextMeshProUGUI countdownText;
     public TextMeshProUGUI timerText;
     public HorsePlayer playerScript;
+    public HorseAIRacer[] aiRacers;
     
     private float raceTime = 0f;
     private bool raceActive = false;
+
+    public float GetRaceTime() => raceTime;
 
     void Start() => StartCoroutine(StartCountdown());
 
@@ -25,6 +28,16 @@ public class RaceManager : MonoBehaviour
         countdownText.text = "GO!";
         
         playerScript.canMove = true;
+        if (aiRacers != null)
+        {
+            for (int i = 0; i < aiRacers.Length; i++)
+            {
+                if (aiRacers[i] != null)
+                {
+                    aiRacers[i].canMove = true;
+                }
+            }
+        }
         raceActive = true;
         
         yield return new WaitForSeconds(1);
@@ -44,6 +57,16 @@ public class RaceManager : MonoBehaviour
     {
         raceActive = false;
         playerScript.canMove = false;
+        if (aiRacers != null)
+        {
+            for (int i = 0; i < aiRacers.Length; i++)
+            {
+                if (aiRacers[i] != null)
+                {
+                    aiRacers[i].canMove = false;
+                }
+            }
+        }
         countdownText.text = "FINISHED!";
         Invoke("ReturnToMenu", 10f); // Wait 10 seconds then leave
     }
