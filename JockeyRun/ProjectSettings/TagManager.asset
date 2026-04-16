@@ -7,6 +7,7 @@ TagManager:
   - StartLine
   - FinishLine
   - Ground
+  - backround
   layers:
   - Default
   - TransparentFX
@@ -41,11 +42,11 @@ TagManager:
   - 
   - 
   m_SortingLayers:
-  - name: Default
-    uniqueID: 0
-    locked: 0
   - name: Background
     uniqueID: 1584051009
+    locked: 0
+  - name: Default
+    uniqueID: 0
     locked: 0
   - name: Foreground
     uniqueID: 2338369151
