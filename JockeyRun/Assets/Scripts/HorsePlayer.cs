@@ -21,10 +21,18 @@ public class HorsePlayer : MonoBehaviour
     private BoxCollider2D col;
     private Vector2 originalColliderSize;
 
+    // add animator components
+
+    private Animator anim;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
+        //create the animator component
+        anim = GetComponent<Animator>();
+
         originalColliderSize = col.size;
         jumpsRemaining = maxJumps;
         currentHealth = maxHealth;
@@ -35,7 +43,11 @@ public class HorsePlayer : MonoBehaviour
 
     void Update()
     {
-        if (!canMove) { rb.velocity = new Vector2(0, rb.velocity.y); return; }
+        if (!canMove) { 
+            rb.velocity = new Vector2(0, rb.velocity.y); 
+            anim.SetFloat("Speed",0f); //goes to idle state 
+            return; 
+        }
 
         if (shieldActive && Time.time >= shieldUntilTime)
         {
@@ -49,11 +61,15 @@ public class HorsePlayer : MonoBehaviour
 
         rb.velocity = new Vector2(moveSpeed * speedMultiplier, rb.velocity.y);
 
+        anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x)); // tells animator how fast the horse is moving 
+
         if (Input.GetKeyDown(KeyCode.Space) && jumpsRemaining > 0)
         {
             rb.velocity = new Vector2(rb.velocity.x, 0); 
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumpsRemaining--;
+
+            anim.SetBool("IsJumping",true); //tells the animator that its jumping 
         }
 
         if (Input.GetKey(KeyCode.LeftShift))
@@ -113,6 +129,7 @@ public class HorsePlayer : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             jumpsRemaining = maxJumps;
+            anim.SetBool("IsJumping", false); // landed on ground so jumping is false. 
         }
     }
 }
