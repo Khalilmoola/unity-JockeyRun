@@ -370,14 +370,6 @@ MonoBehaviour:
   canMove: 0
   maxHealth: 3
   damageInvulnerabilitySeconds: 0.75
-<<<<<<< HEAD
-=======
---- !u!4 &76093812 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 6945227171184637996, guid: e06537aa5d19f4a28a90a02f9538a136, type: 3}
-  m_PrefabInstance: {fileID: 4630596704456453806}
-  m_PrefabAsset: {fileID: 0}
->>>>>>> 81333f377dbc368c6d878408bd6728fe8c9cdc27
 --- !u!1 &141764473
 GameObject:
   m_ObjectHideFlags: 0
@@ -1732,11 +1724,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   countdownText: {fileID: 720197252}
   timerText: {fileID: 1205602826}
-<<<<<<< HEAD
   playerScript: {fileID: 4024570044735529246}
-=======
-  playerScript: {fileID: 76093807}
->>>>>>> 81333f377dbc368c6d878408bd6728fe8c9cdc27
   aiRacers: []
 --- !u!4 &1102300140
 Transform:
@@ -1846,11 +1834,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f583c6a4a94bf4f87908758a7fb52c5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-<<<<<<< HEAD
   player: {fileID: 2783388286261713641}
-=======
-  player: {fileID: 76093812}
->>>>>>> 81333f377dbc368c6d878408bd6728fe8c9cdc27
   xOffset: 5
   yOffset: 2
 --- !u!4 &1204775489
@@ -8762,7 +8746,6 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
-<<<<<<< HEAD
 --- !u!1001 &570827111202500429
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8951,8 +8934,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 938657617757460834, guid: f60447778c0e941e5ac208aad9c55dd0, type: 3}
   m_PrefabInstance: {fileID: 2475010879189026445}
   m_PrefabAsset: {fileID: 0}
-=======
->>>>>>> 81333f377dbc368c6d878408bd6728fe8c9cdc27
 --- !u!1001 &3583413491882725549
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9015,7 +8996,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4046174153176452133, guid: 60c981b1db45b4fc2b99e0a2895f4f20, type: 3}
   m_PrefabInstance: {fileID: 3583413491882725549}
   m_PrefabAsset: {fileID: 0}
-<<<<<<< HEAD
 --- !u!114 &4024570044735529246 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3852614081489331417, guid: f60447778c0e941e5ac208aad9c55dd0, type: 3}
@@ -9027,8 +9007,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 31c02df01aa51464298f19d8638b9046, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-=======
->>>>>>> 81333f377dbc368c6d878408bd6728fe8c9cdc27
 --- !u!1001 &4630596704456453806
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -9058,13 +9036,10 @@ PrefabInstance:
       value: black_horse
       objectReference: {fileID: 0}
     - target: {fileID: 2036149332771683644, guid: e06537aa5d19f4a28a90a02f9538a136, type: 3}
-<<<<<<< HEAD
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2036149332771683644, guid: e06537aa5d19f4a28a90a02f9538a136, type: 3}
-=======
->>>>>>> 81333f377dbc368c6d878408bd6728fe8c9cdc27
       propertyPath: m_TagString
       value: Player
       objectReference: {fileID: 0}
@@ -9213,9 +9188,6 @@ SceneRoots:
   - {fileID: 2102492138}
   - {fileID: 287188509}
   - {fileID: 4630596704456453806}
-<<<<<<< HEAD
   - {fileID: 1141811368604321203}
   - {fileID: 570827111202500429}
   - {fileID: 2475010879189026445}
-=======
->>>>>>> 81333f377dbc368c6d878408bd6728fe8c9cdc27
