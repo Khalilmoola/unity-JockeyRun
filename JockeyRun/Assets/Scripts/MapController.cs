@@ -10,7 +10,7 @@ public class MapController : MonoBehaviour
 
     public void GoToMapTST()
     {
-        SceneManager.LoadScene("TST Map"); 
+        SceneManager.LoadScene("khalilMap1"); 
     }
     public void GoToMapMongKok()
     {
@@ -21,4 +21,6 @@ public class MapController : MonoBehaviour
     {
         SceneManager.LoadScene("Main Menu"); 
     }
+
+    
 }
