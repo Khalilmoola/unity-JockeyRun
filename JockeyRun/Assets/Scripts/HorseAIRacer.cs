@@ -38,6 +38,7 @@ public class HorseAIRacer : MonoBehaviour
     public float hardDifficultyExtraObstacleDistance = 0.25f;
 
     private Rigidbody2D rb;
+    private Animator anim; // Added Animator component
     private int jumpsRemaining;
     private int currentHealth;
     private float invulnerableUntilTime;
@@ -50,6 +51,7 @@ public class HorseAIRacer : MonoBehaviour
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
+        anim = GetComponent<Animator>(); // Grab the Animator component
 
         if (useDifficultyPresets)
         {
@@ -69,6 +71,10 @@ public class HorseAIRacer : MonoBehaviour
         if (!canMove)
         {
             rb.velocity = new Vector2(0, rb.velocity.y);
+            
+            if (anim != null) 
+                anim.SetFloat("Speed", 0f); // goes to idle state
+            
             return;
         }
 
@@ -103,6 +109,9 @@ public class HorseAIRacer : MonoBehaviour
         }
 
         rb.velocity = new Vector2(targetSpeed * speedMultiplier, rb.velocity.y);
+
+        if (anim != null) 
+            anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x)); // tells animator how fast the horse is moving
 
         if (Time.time >= nextJumpDecisionTime && ShouldJump())
         {
@@ -170,6 +179,9 @@ public class HorseAIRacer : MonoBehaviour
         rb.velocity = new Vector2(rb.velocity.x, 0);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         jumpsRemaining--;
+
+        if (anim != null) 
+            anim.SetBool("IsJumping", true); // tells the animator that its jumping
     }
 
     public void TakeDamage(int amount)
@@ -213,6 +225,9 @@ public class HorseAIRacer : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             jumpsRemaining = maxJumps;
+            
+            if (anim != null) 
+                anim.SetBool("IsJumping", false); // landed on ground so jumping is false
         }
     }
 }
