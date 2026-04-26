@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 9072216626274979442}
   - component: {fileID: 132333949510933868}
   - component: {fileID: 7933535283507996449}
+  - component: {fileID: -2786231901707539094}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: brown_horse
@@ -206,3 +207,26 @@ MonoBehaviour:
   canMove: 0
   maxHealth: 3
   damageInvulnerabilitySeconds: 0.75
+--- !u!114 &-2786231901707539094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3920199165064091087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f641693e9265804fb4cbc9d77a88edb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equippedPowerUp: 0
+  hasPowerUp: 0
+  speedBoostMultiplier: 1.5
+  speedBoostDurationSeconds: 1.5
+  shieldDurationSeconds: 1.5
+  healAmount: 1
+  projectilePrefab: {fileID: 0}
+  projectileSpawnPoint: {fileID: 0}
+  projectileSpeed: 12
+  isPlayer: 0
+  activateKey: 101

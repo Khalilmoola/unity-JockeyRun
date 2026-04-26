@@ -8806,6 +8806,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 3198919851502809500, guid: 3767f1a3b2844406a9834ad3f6eb8d6e, type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 2844871729159034868, guid: 14a5e523389a748a48f3536773e586e4, type: 3}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -8819,6 +8823,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: -2786231901707539094, guid: e6dcc90a94ddf4a36a839a4a7e508d21, type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 2844871729159034868, guid: 14a5e523389a748a48f3536773e586e4, type: 3}
     - target: {fileID: 1280696293067176360, guid: e6dcc90a94ddf4a36a839a4a7e508d21, type: 3}
       propertyPath: m_LocalPosition.x
       value: -8.75
@@ -9031,6 +9039,10 @@ PrefabInstance:
       propertyPath: m_Offset.y
       value: -0.10914397
       objectReference: {fileID: 0}
+    - target: {fileID: -378383178163376972, guid: e06537aa5d19f4a28a90a02f9538a136, type: 3}
+      propertyPath: projectilePrefab
+      value: 
+      objectReference: {fileID: 2844871729159034868, guid: 14a5e523389a748a48f3536773e586e4, type: 3}
     - target: {fileID: 2036149332771683644, guid: e06537aa5d19f4a28a90a02f9538a136, type: 3}
       propertyPath: m_Name
       value: black_horse
