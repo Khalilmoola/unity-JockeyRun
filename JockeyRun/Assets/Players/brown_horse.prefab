@@ -13,7 +13,8 @@ GameObject:
   - component: {fileID: 4132579751156613401}
   - component: {fileID: 9072216626274979442}
   - component: {fileID: 132333949510933868}
-  - component: {fileID: 7933535283507996449}
+  - component: {fileID: -2786231901707539094}
+  - component: {fileID: -4323395155101572506}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: brown_horse
@@ -188,7 +189,7 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
---- !u!114 &7933535283507996449
+--- !u!114 &-2786231901707539094
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -197,12 +198,50 @@ MonoBehaviour:
   m_GameObject: {fileID: 3920199165064091087}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31c02df01aa51464298f19d8638b9046, type: 3}
+  m_Script: {fileID: 11500000, guid: 8f641693e9265804fb4cbc9d77a88edb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpForce: 6
-  maxJumps: 3
-  canMove: 0
+  equippedPowerUp: 0
+  hasPowerUp: 0
+  speedBoostMultiplier: 1.5
+  speedBoostDurationSeconds: 1.5
+  shieldDurationSeconds: 1.5
+  healAmount: 1
+  projectilePrefab: {fileID: 0}
+  projectileSpawnPoint: {fileID: 0}
+  projectileSpeed: 12
+  isPlayer: 0
+  activateKey: 101
+--- !u!114 &-4323395155101572506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3920199165064091087}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3055f74892ef18a43bc73244cc79f232, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  useDifficultyPresets: 1
+  difficulty: 1
+  baseMoveSpeed: 9
+  maxCatchupSpeed: 12
+  jumpForce: 12
+  maxJumps: 2
+  obstacleMask:
+    serializedVersion: 2
+    m_Bits: 0
+  obstacleDetectDistance: 1.5
+  obstacleDetectHeightOffset: 0.3
   maxHealth: 3
   damageInvulnerabilitySeconds: 0.75
+  canMove: 0
+  player: {fileID: 0}
+  useRubberBanding: 1
+  catchupDistance: 6
+  slowDownIfAheadDistance: 6
+  aheadSpeedMultiplier: 0.92
+  jumpDecisionCooldownSeconds: 0.15
+  hardDifficultyExtraObstacleDistance: 0.25

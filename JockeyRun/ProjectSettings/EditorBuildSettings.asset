@@ -24,8 +24,8 @@ EditorBuildSettings:
     path: Assets/Scenes/Mong Kok Map.scene
     guid: 1b9408eb7a4f94e4799844499483791f
   - enabled: 1
-    path: Assets/Scenes/khalilMap1.scene
-    guid: a7b915951b97049708262b5ebf619b10
+    path: Assets/Scenes/Main Menu 1.scene
+    guid: fe2ce01eca6664f409ff47d9edb71aed
   m_BuildProfiles: []
   m_configObjects: {}
   m_SlimFeaturesWeixinMiniGame:

@@ -1,5 +1,37 @@
 %YAML 1.1
 %TAG !u! tag:yousandi.cn,2023:
+--- !u!1 &6335408898888340144
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 7
+  m_Component:
+  - component: {fileID: 5048212496619806231}
+  m_Layer: 0
+  m_HasEditorInfo: 1
+  m_Name: FirePoint
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5048212496619806231
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6335408898888340144}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 938657617757460834}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &7280881381419243215
 GameObject:
   m_ObjectHideFlags: 0
@@ -14,6 +46,7 @@ GameObject:
   - component: {fileID: 8620857605560503666}
   - component: {fileID: 2901517675030838918}
   - component: {fileID: 3852614081489331417}
+  - component: {fileID: -3543928810332801336}
   m_Layer: 0
   m_HasEditorInfo: 1
   m_Name: grey_horse
@@ -34,7 +67,8 @@ Transform:
   m_LocalPosition: {x: -8.87, y: 2.79, z: 0}
   m_LocalScale: {x: 0.29824424, y: 0.29824424, z: 0.29824424}
   m_ConstrainProportionsScale: 0
-  m_Children: []
+  m_Children:
+  - {fileID: 5048212496619806231}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &7099206691796109806
@@ -206,3 +240,26 @@ MonoBehaviour:
   canMove: 0
   maxHealth: 3
   damageInvulnerabilitySeconds: 0.75
+--- !u!114 &-3543928810332801336
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7280881381419243215}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8f641693e9265804fb4cbc9d77a88edb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  equippedPowerUp: 0
+  hasPowerUp: 0
+  speedBoostMultiplier: 1.5
+  speedBoostDurationSeconds: 1.5
+  shieldDurationSeconds: 1.5
+  healAmount: 1
+  projectilePrefab: {fileID: 2844871729159034868, guid: 14a5e523389a748a48f3536773e586e4, type: 3}
+  projectileSpawnPoint: {fileID: 5048212496619806231}
+  projectileSpeed: 12
+  isPlayer: 1
+  activateKey: 101
