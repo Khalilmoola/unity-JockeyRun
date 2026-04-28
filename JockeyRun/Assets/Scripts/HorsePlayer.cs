@@ -21,16 +21,12 @@ public class HorsePlayer : MonoBehaviour
     private BoxCollider2D col;
     private Vector2 originalColliderSize;
 
-    // add animator components
-
     private Animator anim;
-
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
-        //create the animator component
         anim = GetComponent<Animator>();
 
         originalColliderSize = col.size;
@@ -43,10 +39,14 @@ public class HorsePlayer : MonoBehaviour
 
     void Update()
     {
-        if (!canMove) { 
-            rb.velocity = new Vector2(0, rb.velocity.y); 
-            anim.SetFloat("Speed",0f); //goes to idle state 
-            return; 
+        if (!canMove)
+        {
+            rb.velocity = new Vector2(0, rb.velocity.y);
+            anim.SetFloat("Speed", 0f);
+
+            // stop running loop if player can't move
+            AudioManager.Instance.StopLoop(AudioEvent.RunningLoop);
+            return;
         }
 
         if (shieldActive && Time.time >= shieldUntilTime)
@@ -61,15 +61,27 @@ public class HorsePlayer : MonoBehaviour
 
         rb.velocity = new Vector2(moveSpeed * speedMultiplier, rb.velocity.y);
 
-        anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x)); // tells animator how fast the horse is moving 
+        anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
+
+        // ▶ Running loop sound
+        if (Mathf.Abs(rb.velocity.x) > 0.1f)
+        {
+            AudioManager.Instance.PlayLoop(AudioEvent.RunningLoop);
+        }
 
         if (Input.GetKeyDown(KeyCode.Space) && jumpsRemaining > 0)
         {
-            rb.velocity = new Vector2(rb.velocity.x, 0); 
+            rb.velocity = new Vector2(rb.velocity.x, 0);
             rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
             jumpsRemaining--;
 
-            anim.SetBool("IsJumping",true); //tells the animator that its jumping 
+            anim.SetBool("IsJumping", true);
+
+            // 🔊 Jump sound
+            AudioManager.Instance.PlaySfx(AudioEvent.Jump);
+
+            // stop running sound while in air
+            AudioManager.Instance.StopLoop(AudioEvent.RunningLoop);
         }
 
         if (Input.GetKey(KeyCode.LeftShift))
@@ -91,10 +103,19 @@ public class HorsePlayer : MonoBehaviour
         currentHealth -= amount;
         invulnerableUntilTime = Time.time + damageInvulnerabilitySeconds;
 
+        // 🔊 Damage sound
+        AudioManager.Instance.PlaySfx(AudioEvent.Damage);
+
         if (currentHealth <= 0)
         {
             currentHealth = 0;
             canMove = false;
+
+            // 🔊 Death sound
+            AudioManager.Instance.PlaySfx(AudioEvent.Death);
+
+            // stop running sound
+            AudioManager.Instance.StopLoop(AudioEvent.RunningLoop);
         }
     }
 
@@ -102,6 +123,9 @@ public class HorsePlayer : MonoBehaviour
     {
         if (amount <= 0) return;
         currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+
+        // 🔊 optional: power-up/heal sound
+        AudioManager.Instance.PlaySfx(AudioEvent.PowerUpPickup);
     }
 
     public void ApplySpeedMultiplier(float multiplier, float durationSeconds)
@@ -110,6 +134,9 @@ public class HorsePlayer : MonoBehaviour
 
         speedMultiplier = Mathf.Clamp(multiplier, 0.05f, 5f);
         speedMultiplierUntilTime = Time.time + durationSeconds;
+
+        // 🔊 speed boost sound
+        AudioManager.Instance.PlaySfx(AudioEvent.PowerUpActivate);
     }
 
     public void ApplyShield(float durationSeconds)
@@ -118,6 +145,9 @@ public class HorsePlayer : MonoBehaviour
 
         shieldActive = true;
         shieldUntilTime = Mathf.Max(shieldUntilTime, Time.time + durationSeconds);
+
+        // 🔊 shield sound
+        AudioManager.Instance.PlaySfx(AudioEvent.PowerUpActivate);
     }
 
     public bool IsShieldActive() => shieldActive;
@@ -129,7 +159,10 @@ public class HorsePlayer : MonoBehaviour
         if (collision.gameObject.CompareTag("Ground"))
         {
             jumpsRemaining = maxJumps;
-            anim.SetBool("IsJumping", false); // landed on ground so jumping is false. 
+            anim.SetBool("IsJumping", false);
+
+            // 🔊 landing sound
+            AudioManager.Instance.PlaySfx(AudioEvent.Land);
         }
     }
 }
