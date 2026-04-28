@@ -98,8 +98,11 @@ public class AudioManager : MonoBehaviour
 
     public void PlayLoop(AudioEvent audioEvent)
     {
-        if (loopSource == null) return;
-        if (!TryGetEntry(audioEvent, out AudioEventClip entry)) return;
+        
+       // --- ADD THESE TWO LINES ---
+        if (loopSource == null) Debug.LogWarning("FAILED: LoopSource is missing in the Inspector!");
+        if (!TryGetEntry(audioEvent, out AudioEventClip entry)) Debug.LogWarning("FAILED: " + audioEvent + " is missing from the Library or has no AudioClip!");
+        // -----------------------------
 
         loopSource.volume = masterVolume * sfxVolume * entry.volume;
         loopSource.loop = true;

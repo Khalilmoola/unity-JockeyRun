@@ -156,8 +156,11 @@ public class HorsePlayer : MonoBehaviour
 
     private void OnCollisionEnter2D(Collision2D collision)
     {
+        Debug.Log("Horse touched something tagged: " + collision.gameObject.tag);
+
         if (collision.gameObject.CompareTag("Ground"))
         {
+            
             jumpsRemaining = maxJumps;
             anim.SetBool("IsJumping", false);
 
