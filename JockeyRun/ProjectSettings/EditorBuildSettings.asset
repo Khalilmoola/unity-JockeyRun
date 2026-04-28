@@ -19,13 +19,19 @@ EditorBuildSettings:
     guid: 8730e2b9910554d9e8a9575f9489a395
   - enabled: 1
     path: Assets/Scenes/TST Map.scene
-    guid: c6a8dc70e11f94f8a8364ab7fb921e3d
+    guid: c512d1d38358f4b078bfd44eb2ab8850
   - enabled: 1
     path: Assets/Scenes/Mong Kok Map.scene
-    guid: 1b9408eb7a4f94e4799844499483791f
-  - enabled: 1
+    guid: 562228689bd8e4118a45fc5dc0598907
+  - enabled: 0
     path: Assets/Scenes/Main Menu 1.scene
     guid: fe2ce01eca6664f409ff47d9edb71aed
+  - enabled: 1
+    path: Assets/Scenes/khalilMap1.scene
+    guid: a7b915951b97049708262b5ebf619b10
+  - enabled: 1
+    path: Assets/Scenes/khalilmap2.scene
+    guid: e4c4888e0a94e4cf0bf8d6d185122cbe
   m_BuildProfiles: []
   m_configObjects: {}
   m_SlimFeaturesWeixinMiniGame:
