@@ -35,6 +35,9 @@ public class HorsePlayer : MonoBehaviour
         invulnerableUntilTime = 0f;
         shieldActive = false;
         shieldUntilTime = 0f;
+
+        //play bg music 
+        AudioManager.Instance.PlayMusic(AudioEvent.BackgroundMusic);
     }
 
     void Update()

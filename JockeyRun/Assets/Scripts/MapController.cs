@@ -4,22 +4,30 @@ using UnityEngine.SceneManagement;
 public class MapController : MonoBehaviour
 {
     public void GoToMapCentral()
-    {
-        SceneManager.LoadScene("Central Map"); 
+    {   
+        AudioManager.Instance.PlaySfx(AudioEvent.MenuButton);
+
+        SceneManager.LoadScene("khalilMap1"); 
     }
 
     public void GoToMapTST()
-    {
+    {   
+        AudioManager.Instance.PlaySfx(AudioEvent.MenuButton);
+
         SceneManager.LoadScene("khalilMap1"); 
     }
     public void GoToMapMongKok()
     {
-        SceneManager.LoadScene("Mong Kok Map"); 
+        AudioManager.Instance.PlaySfx(AudioEvent.MenuButton);
+
+        SceneManager.LoadScene("khalilMap1"); 
     }
     
     public void GoToMainMenu()
-    {
-        SceneManager.LoadScene("Main Menu"); 
+    {   
+        AudioManager.Instance.PlaySfx(AudioEvent.MenuButton);
+
+        SceneManager.LoadScene("khalilMap1"); 
     }
 
     

@@ -409,24 +409,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 2036149332771683644, guid: e06537aa5d19f4a28a90a02f9538a136, type: 3}
   m_PrefabInstance: {fileID: 4630596704456453806}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &76093807
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 76093806}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31c02df01aa51464298f19d8638b9046, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  moveSpeed: 5
-  jumpForce: 6
-  maxJumps: 3
-  canMove: 0
-  maxHealth: 3
-  damageInvulnerabilitySeconds: 0.75
 --- !u!114 &76093808 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2254101808128726789, guid: e06537aa5d19f4a28a90a02f9538a136, type: 3}
@@ -2563,7 +2545,7 @@ MonoBehaviour:
   clips:
   - audioEvent: 6
     clip: {fileID: 8300000, guid: c625eb9d1dbbc4632bc4f7c144d8be92, type: 3}
-    volume: 1
+    volume: 0.17
     loop: 1
   - audioEvent: 4
     clip: {fileID: 8300000, guid: a2f29fed624eb40318a1a108dd438406, type: 3}
@@ -2571,7 +2553,31 @@ MonoBehaviour:
     loop: 0
   - audioEvent: 5
     clip: {fileID: 8300000, guid: e96de8450a1f74b058e7e33f2449c68e, type: 3}
-    volume: 0
+    volume: 0.103
+    loop: 0
+  - audioEvent: 0
+    clip: {fileID: 8300000, guid: 032c87f1059894a1796ccd1733281643, type: 3}
+    volume: 0.4
+    loop: 0
+  - audioEvent: 3
+    clip: {fileID: 8300000, guid: e03be59d32ddb42328e46b9b7a8b837c, type: 3}
+    volume: 0.4
+    loop: 0
+  - audioEvent: 1
+    clip: {fileID: 8300000, guid: 78dc0555e12984a969ac1aba32775c08, type: 3}
+    volume: 0.4
+    loop: 0
+  - audioEvent: 8
+    clip: {fileID: 8300000, guid: b6b4ecd90796644b9b70992c5dbb7f3b, type: 3}
+    volume: 0.5
+    loop: 0
+  - audioEvent: 7
+    clip: {fileID: 8300000, guid: ee3e30c26c1eb4a3d88be14eedd0ff7b, type: 3}
+    volume: 0.14
+    loop: 1
+  - audioEvent: 9
+    clip: {fileID: 8300000, guid: 9d294e6837c084616bdb8b843a3cf1ac, type: 3}
+    volume: 0.5
     loop: 0
   masterVolume: 1
   sfxVolume: 1
@@ -41297,9 +41303,6 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 2036149332771683644, guid: e06537aa5d19f4a28a90a02f9538a136, type: 3}
       insertIndex: -1
       addedObject: {fileID: 76093815}
-    - targetCorrespondingSourceObject: {fileID: 2036149332771683644, guid: e06537aa5d19f4a28a90a02f9538a136, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 76093807}
   m_SourcePrefab: {fileID: 100100000, guid: e06537aa5d19f4a28a90a02f9538a136, type: 3}
 --- !u!1001 &6498482451458389874
 PrefabInstance:
