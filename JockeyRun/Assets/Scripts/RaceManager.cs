@@ -51,6 +51,17 @@ public class RaceManager : MonoBehaviour
             raceTime += Time.deltaTime;
             timerText.text = raceTime.ToString("F2") + "s";
         }
+
+        //listen for esc
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            if (AudioManager.Instance != null)
+            {
+                AudioManager.Instance.PlaySfx(AudioEvent.MenuButton);
+            }
+            
+            SceneManager.LoadScene("Main Menu");
+        }
     }
 
     public void FinishRace()

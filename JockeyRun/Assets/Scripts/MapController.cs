@@ -27,7 +27,7 @@ public class MapController : MonoBehaviour
     {   
         AudioManager.Instance.PlaySfx(AudioEvent.MenuButton);
 
-        SceneManager.LoadScene("khalilMap1"); 
+        SceneManager.LoadScene("Main Menu"); 
     }
 
     
