@@ -1,4 +1,5 @@
 using UnityEngine;
+using System.Collections; // for the colour flash 
 
 public class HorsePlayer : MonoBehaviour
 {
@@ -7,54 +8,68 @@ public class HorsePlayer : MonoBehaviour
     public int maxJumps = 3;
     public bool canMove = false;
 
-    public int maxHealth = 3;
+    [Header("Knockback Settings")]
+    public Vector2 knockbackForce = new Vector2(-10f, 5f); // pushes left and slightly up
+    public float knockbackStunSeconds = 0.5f;
     public float damageInvulnerabilitySeconds = 0.75f;
 
     private int jumpsRemaining;
-    private int currentHealth;
     private float invulnerableUntilTime;
+    private float stunUntilTime; // new timer to pause running during knockback
     private bool shieldActive;
+
+    private float freezeUntilTime; //this should freeze the player for this amount of time 
     private float shieldUntilTime;
     private float speedMultiplier = 1f;
     private float speedMultiplierUntilTime = 0f;
+    
+    private SpriteRenderer spriteRenderer; // needed to the sprite graphic, to turn it red 
     private Rigidbody2D rb;
     private BoxCollider2D col;
     private Vector2 originalColliderSize;
-
     private Animator anim;
+
+    private Coroutine colorRoutine; // tracks the color flash so it doesn't overlap
 
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         col = GetComponent<BoxCollider2D>();
         anim = GetComponent<Animator>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
         originalColliderSize = col.size;
         jumpsRemaining = maxJumps;
-        currentHealth = maxHealth;
         invulnerableUntilTime = 0f;
+        stunUntilTime = 0f;
+        freezeUntilTime = 0f;
         shieldActive = false;
         shieldUntilTime = 0f;
 
-        //play bg music 
         AudioManager.Instance.PlayMusic(AudioEvent.BackgroundMusic);
     }
 
     void Update()
     {
-        if (!canMove)
+        // if race not started or the horse is already hurt then don't 
+        if (!canMove || Time.time < stunUntilTime || Time.time < freezeUntilTime)
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
-            anim.SetFloat("Speed", 0f);
-
-            // stop running loop if player can't move
+            // let physics handle the knockback or frozen 
+            if (!canMove || Time.time < freezeUntilTime) 
+            {
+                rb.velocity = new Vector2(0, rb.velocity.y); 
+            }
+            
+            anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
             AudioManager.Instance.StopLoop(AudioEvent.RunningLoop);
             return;
         }
 
+        //other power ups which can occur 
         if (shieldActive && Time.time >= shieldUntilTime)
-        {
+        {   
             shieldActive = false;
+            UpdateColor(); // Revert color when shield expires
         }
 
         if (speedMultiplier != 1f && Time.time >= speedMultiplierUntilTime)
@@ -62,11 +77,10 @@ public class HorsePlayer : MonoBehaviour
             speedMultiplier = 1f;
         }
 
+        // Normal running movement
         rb.velocity = new Vector2(moveSpeed * speedMultiplier, rb.velocity.y);
-
         anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
 
-        // ▶ Running loop sound
         if (Mathf.Abs(rb.velocity.x) > 0.1f)
         {
             AudioManager.Instance.PlayLoop(AudioEvent.RunningLoop);
@@ -79,11 +93,7 @@ public class HorsePlayer : MonoBehaviour
             jumpsRemaining--;
 
             anim.SetBool("IsJumping", true);
-
-            // 🔊 Jump sound
             AudioManager.Instance.PlaySfx(AudioEvent.Jump);
-
-            // stop running sound while in air
             AudioManager.Instance.StopLoop(AudioEvent.RunningLoop);
         }
 
@@ -97,77 +107,108 @@ public class HorsePlayer : MonoBehaviour
         }
     }
 
-    public void TakeDamage(int amount)
+    public void TakeKnockback()
     {
-        if (amount <= 0) return;
-        if (shieldActive) return;
+        if (shieldActive) 
+        {
+            shieldActive = false; // Shield absorbs the hit and breaks
+            UpdateColor(); // shield broke, revert color immediately
+            AudioManager.Instance.PlaySfx(AudioEvent.Damage); //  change to a shield break sound maybe? 
+            return;
+        }
         if (Time.time < invulnerableUntilTime) return;
 
-        currentHealth -= amount;
+        // Apply timers
+        stunUntilTime = Time.time + knockbackStunSeconds;
+
+        freezeUntilTime = 0f; //get rid of frozen time
         invulnerableUntilTime = Time.time + damageInvulnerabilitySeconds;
 
-        // 🔊 Damage sound
-        AudioManager.Instance.PlaySfx(AudioEvent.Damage);
+        // Reset current velocity so the knockback is consistent, then apply the force
+        rb.velocity = Vector2.zero;
+        rb.AddForce(knockbackForce, ForceMode2D.Impulse);
 
-        if (currentHealth <= 0)
+        if (spriteRenderer != null)
         {
-            currentHealth = 0;
-            canMove = false;
-
-            // 🔊 Death sound
-            AudioManager.Instance.PlaySfx(AudioEvent.Death);
-
-            // stop running sound
-            AudioManager.Instance.StopLoop(AudioEvent.RunningLoop);
+            if (colorRoutine != null) StopCoroutine(colorRoutine);
+            colorRoutine = StartCoroutine(ColorFlashRoutine(Color.red, knockbackStunSeconds));
         }
+
+        AudioManager.Instance.PlaySfx(AudioEvent.Damage);
+        AudioManager.Instance.StopLoop(AudioEvent.RunningLoop);
     }
 
-    public void Heal(int amount)
+    public void TakeFreeze(float durationSeconds)
     {
-        if (amount <= 0) return;
-        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
+        if (shieldActive) 
+        {
+            shieldActive = false; 
+            UpdateColor(); // Shield broke, revert color
+            AudioManager.Instance.PlaySfx(AudioEvent.Damage); 
+            return;
+        }
+        if (Time.time < invulnerableUntilTime) return;
 
-        // 🔊 optional: power-up/heal sound
-        AudioManager.Instance.PlaySfx(AudioEvent.PowerUpPickup);
+        freezeUntilTime = Time.time + durationSeconds;
+
+        stunUntilTime = 0f; // getting frozen cancels a knockback slide
+        invulnerableUntilTime = Time.time + damageInvulnerabilitySeconds;
+
+        // Instantly stop moving
+        rb.velocity = new Vector2(0, rb.velocity.y);
+
+        //chnage colour to show freeze
+        if (spriteRenderer != null)
+        {
+            if (colorRoutine != null) StopCoroutine(colorRoutine);
+            colorRoutine = StartCoroutine(ColorFlashRoutine(Color.cyan, durationSeconds));
+        }
+
+        AudioManager.Instance.PlaySfx(AudioEvent.Damage); 
+        AudioManager.Instance.StopLoop(AudioEvent.RunningLoop);
+    }
+    //for the shield if it is picked up 
+    private void UpdateColor()
+    {
+        if (spriteRenderer == null || colorRoutine != null) return;
+        
+        // Color.yellow acts as a nice gold tint in Unity
+        if (shieldActive) spriteRenderer.color = Color.yellow;
+        else spriteRenderer.color = Color.white; // white means, no tint
+    }
+    //runs in background and waits for the stun to end, takes in colour, and the duration 
+    private IEnumerator ColorFlashRoutine(Color flashColor, float duration)
+    {
+        spriteRenderer.color = flashColor;
+        yield return new WaitForSeconds(duration);
+
+        colorRoutine = null; // clear routine 
+        UpdateColor(); // re eval the colour 
     }
 
     public void ApplySpeedMultiplier(float multiplier, float durationSeconds)
     {
         if (durationSeconds <= 0f) return;
-
         speedMultiplier = Mathf.Clamp(multiplier, 0.05f, 5f);
         speedMultiplierUntilTime = Time.time + durationSeconds;
-
-        // 🔊 speed boost sound
         AudioManager.Instance.PlaySfx(AudioEvent.PowerUpActivate);
     }
 
     public void ApplyShield(float durationSeconds)
     {
         if (durationSeconds <= 0f) return;
-
         shieldActive = true;
         shieldUntilTime = Mathf.Max(shieldUntilTime, Time.time + durationSeconds);
-
-        // 🔊 shield sound
+        UpdateColor(); //turn golden 
         AudioManager.Instance.PlaySfx(AudioEvent.PowerUpActivate);
     }
 
-    public bool IsShieldActive() => shieldActive;
-
-    public int GetCurrentHealth() => currentHealth;
-
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        Debug.Log("Horse touched something tagged: " + collision.gameObject.tag);
-
         if (collision.gameObject.CompareTag("Ground"))
         {
-            
             jumpsRemaining = maxJumps;
             anim.SetBool("IsJumping", false);
-
-            // 🔊 landing sound
             AudioManager.Instance.PlaySfx(AudioEvent.Land);
         }
     }

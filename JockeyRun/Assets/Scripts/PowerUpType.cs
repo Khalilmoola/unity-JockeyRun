@@ -1,7 +1,1 @@
-public enum PowerUpType
-{
-    SpeedBoost,
-    Shield,
-    Heal,
-    Projectile
-}
+public enum PowerUpType { Shield, SpeedBoost, Projectile, FreezeTrap }

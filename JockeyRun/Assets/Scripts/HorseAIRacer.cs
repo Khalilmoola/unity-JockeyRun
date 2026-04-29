@@ -1,13 +1,10 @@
 using UnityEngine;
+using System.Collections; // for the colour flash 
+
 
 public class HorseAIRacer : MonoBehaviour
 {
-    public enum AIRacerDifficulty
-    {
-        Easy,
-        Medium,
-        Hard
-    }
+    public enum AIRacerDifficulty { Easy, Medium, Hard }
 
     public bool useDifficultyPresets = true;
     public AIRacerDifficulty difficulty = AIRacerDifficulty.Medium;
@@ -20,8 +17,11 @@ public class HorseAIRacer : MonoBehaviour
     public LayerMask obstacleMask;
     public float obstacleDetectDistance = 1.5f;
     public float obstacleDetectHeightOffset = 0.3f;
+    
 
-    public int maxHealth = 3;
+    [Header("Knockback Settings")]
+    public Vector2 knockbackForce = new Vector2(-10f, 5f);
+    public float knockbackStunSeconds = 0.5f;
     public float damageInvulnerabilitySeconds = 0.75f;
 
     public bool canMove = false;
@@ -38,61 +38,60 @@ public class HorseAIRacer : MonoBehaviour
     public float hardDifficultyExtraObstacleDistance = 0.25f;
 
     private Rigidbody2D rb;
-    private Animator anim; // Added Animator component
+    private Animator anim; 
     private int jumpsRemaining;
-    private int currentHealth;
     private float invulnerableUntilTime;
+    private float stunUntilTime; //knockback 
+    private float freezeUntilTime; //freezetime 
     private bool shieldActive;
     private float shieldUntilTime;
     private float speedMultiplier = 1f;
     private float speedMultiplierUntilTime = 0f;
     private float nextJumpDecisionTime;
 
+    private Coroutine colorRoutine; //create the colour rpoutine to keep track of it. 
+    private SpriteRenderer spriteRenderer;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>(); // Grab the Animator component
+        anim = GetComponent<Animator>(); 
+        spriteRenderer = GetComponent<SpriteRenderer>();
 
-        if (useDifficultyPresets)
-        {
-            ApplyDifficultyPreset();
-        }
+        if (useDifficultyPresets) ApplyDifficultyPreset();
 
         jumpsRemaining = maxJumps;
-        currentHealth = maxHealth;
         invulnerableUntilTime = 0f;
+        stunUntilTime = 0f;
+        freezeUntilTime = 0f;
         shieldActive = false;
+
+
         shieldUntilTime = 0f;
         nextJumpDecisionTime = 0f;
     }
 
-    void Update()
-    {
-        if (!canMove)
+void Update()
+    {   
+        //check if it can move and if the time is less than stun time and feeeze time 
+        if (!canMove || Time.time < stunUntilTime || Time.time < freezeUntilTime)
         {
-            rb.velocity = new Vector2(0, rb.velocity.y);
-            
-            if (anim != null) 
-                anim.SetFloat("Speed", 0f); // goes to idle state
-            
+            if (!canMove || Time.time < freezeUntilTime) rb.velocity = new Vector2(0, rb.velocity.y);
+            if (anim != null) anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x)); 
             return;
         }
 
-        if (speedMultiplier != 1f && Time.time >= speedMultiplierUntilTime)
-        {
-            speedMultiplier = 1f;
-        }
-
-        if (shieldActive && Time.time >= shieldUntilTime)
-        {
+        //handle other power ups that can appear 
+        if (speedMultiplier != 1f && Time.time >= speedMultiplierUntilTime) speedMultiplier = 1f;
+        if (shieldActive && Time.time >= shieldUntilTime) {
             shieldActive = false;
+            UpdateColor();
         }
 
         float targetSpeed = baseMoveSpeed;
         if (useRubberBanding && player != null)
         {
             float delta = player.position.x - transform.position.x;
-
             if (delta > 0f)
             {
                 float t = catchupDistance <= 0.0001f ? 1f : Mathf.Clamp01(delta / catchupDistance);
@@ -108,10 +107,11 @@ public class HorseAIRacer : MonoBehaviour
             }
         }
 
+        //create new velocity, for the update 
+
         rb.velocity = new Vector2(targetSpeed * speedMultiplier, rb.velocity.y);
 
-        if (anim != null) 
-            anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x)); // tells animator how fast the horse is moving
+        if (anim != null) anim.SetFloat("Speed", Mathf.Abs(rb.velocity.x));
 
         if (Time.time >= nextJumpDecisionTime && ShouldJump())
         {
@@ -125,44 +125,22 @@ public class HorseAIRacer : MonoBehaviour
         switch (difficulty)
         {
             case AIRacerDifficulty.Easy:
-                baseMoveSpeed = 8.5f;
-                maxCatchupSpeed = 10.5f;
-                obstacleDetectDistance = 1.25f;
-                jumpDecisionCooldownSeconds = 0.22f;
-                catchupDistance = 9f;
-                slowDownIfAheadDistance = 5f;
-                aheadSpeedMultiplier = 0.9f;
-                maxJumps = 2;
-                break;
+                baseMoveSpeed = 8.5f; maxCatchupSpeed = 10.5f; obstacleDetectDistance = 1.25f;
+                jumpDecisionCooldownSeconds = 0.22f; catchupDistance = 9f; slowDownIfAheadDistance = 5f;
+                aheadSpeedMultiplier = 0.9f; maxJumps = 2; break;
+
 
             case AIRacerDifficulty.Medium:
-                baseMoveSpeed = 9.2f;
-                maxCatchupSpeed = 12.2f;
-                obstacleDetectDistance = 1.5f;
-                jumpDecisionCooldownSeconds = 0.15f;
-                catchupDistance = 7f;
-                slowDownIfAheadDistance = 6f;
-                aheadSpeedMultiplier = 0.92f;
-                maxJumps = 2;
-                break;
+                baseMoveSpeed = 9.2f; maxCatchupSpeed = 12.2f; obstacleDetectDistance = 1.5f;
+                jumpDecisionCooldownSeconds = 0.15f; catchupDistance = 7f; slowDownIfAheadDistance = 6f;
+                aheadSpeedMultiplier = 0.92f; maxJumps = 2; break;
+
 
             case AIRacerDifficulty.Hard:
-                baseMoveSpeed = 10.0f;
-                maxCatchupSpeed = 13.8f;
-                obstacleDetectDistance = 1.7f + Mathf.Max(0f, hardDifficultyExtraObstacleDistance);
-                jumpDecisionCooldownSeconds = 0.10f;
-                catchupDistance = 6f;
-                slowDownIfAheadDistance = 8f;
-                aheadSpeedMultiplier = 0.97f;
-                maxJumps = 3;
-                break;
+                baseMoveSpeed = 10.0f; maxCatchupSpeed = 13.8f; obstacleDetectDistance = 1.7f + Mathf.Max(0f, hardDifficultyExtraObstacleDistance);
+                jumpDecisionCooldownSeconds = 0.10f; catchupDistance = 6f; slowDownIfAheadDistance = 8f;
+                aheadSpeedMultiplier = 0.97f; maxJumps = 3; break;
         }
-    }
-
-    public void Heal(int amount)
-    {
-        if (amount <= 0) return;
-        currentHealth = Mathf.Min(maxHealth, currentHealth + amount);
     }
 
     private bool ShouldJump()
@@ -172,62 +150,113 @@ public class HorseAIRacer : MonoBehaviour
         return hit.collider != null;
     }
 
+    //ai raceer jump logic
     private void TryJump()
     {
         if (jumpsRemaining <= 0) return;
-
         rb.velocity = new Vector2(rb.velocity.x, 0);
         rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Impulse);
         jumpsRemaining--;
-
-        if (anim != null) 
-            anim.SetBool("IsJumping", true); // tells the animator that its jumping
+        if (anim != null) anim.SetBool("IsJumping", true); 
     }
 
-    public void TakeDamage(int amount)
+
+    //function for the player to take knock back 
+    public void TakeKnockback()
     {
-        if (amount <= 0) return;
-        if (shieldActive) return;
+        if (shieldActive) 
+        {
+            shieldActive = false;
+            UpdateColor();
+            return;
+
+        }
         if (Time.time < invulnerableUntilTime) return;
 
-        currentHealth -= amount;
+        stunUntilTime = Time.time + knockbackStunSeconds;
+
+        freezeUntilTime = 0f;
         invulnerableUntilTime = Time.time + damageInvulnerabilitySeconds;
 
-        if (currentHealth <= 0)
+        rb.velocity = Vector2.zero;
+        rb.AddForce(knockbackForce, ForceMode2D.Impulse);
+        
+        //create the red flash 
+        if (spriteRenderer != null)
         {
-            currentHealth = 0;
-            canMove = false;
+            if (colorRoutine != null) StopCoroutine(colorRoutine);
+            colorRoutine = StartCoroutine(ColorFlashRoutine(Color.red, knockbackStunSeconds));
+        }    
+    }  
+
+    //method to create a freeze on the player 
+    public void TakeFreeze(float durationSeconds)
+    {
+        if (shieldActive) 
+        {
+            shieldActive = false;
+            UpdateColor();
+            return;
+        }
+        if (Time.time < invulnerableUntilTime) return;
+
+        freezeUntilTime = Time.time + durationSeconds;
+        //stop the stun time if its already frozen 
+        stunUntilTime = 0f;
+
+        invulnerableUntilTime = Time.time + damageInvulnerabilitySeconds;
+
+        rb.velocity = new Vector2(0, rb.velocity.y);
+        //create a cyan freeze 
+        if (spriteRenderer != null)
+        {
+            if (colorRoutine != null) StopCoroutine(colorRoutine);
+            colorRoutine = StartCoroutine(ColorFlashRoutine(Color.cyan, durationSeconds));
         }
     }
 
+   private void UpdateColor()
+    {
+        if (spriteRenderer == null || colorRoutine != null) return;
+        if (shieldActive) spriteRenderer.color = Color.yellow;
+        else spriteRenderer.color = Color.white; 
+    }
+
+    private IEnumerator ColorFlashRoutine(Color flashColor, float duration)
+    {
+        spriteRenderer.color = flashColor;
+        yield return new WaitForSeconds(duration);
+        colorRoutine = null; 
+        UpdateColor(); 
+    }
+
+    //function to apply speed 
     public void ApplySpeedMultiplier(float multiplier, float durationSeconds)
     {
         if (durationSeconds <= 0f) return;
-
         speedMultiplier = Mathf.Clamp(multiplier, 0.05f, 5f);
+
+
         speedMultiplierUntilTime = Time.time + durationSeconds;
     }
 
+    //function to protect the player for knockback 
     public void ApplyShield(float durationSeconds)
     {
         if (durationSeconds <= 0f) return;
-
         shieldActive = true;
+
         shieldUntilTime = Mathf.Max(shieldUntilTime, Time.time + durationSeconds);
+        UpdateColor();
     }
 
-    public bool IsShieldActive() => shieldActive;
-
-    public int GetCurrentHealth() => currentHealth;
-
+    //checks if its on the ground 
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (collision.gameObject.CompareTag("Ground"))
         {
             jumpsRemaining = maxJumps;
-            
-            if (anim != null) 
-                anim.SetBool("IsJumping", false); // landed on ground so jumping is false
+            if (anim != null) anim.SetBool("IsJumping", false); 
         }
     }
 }
