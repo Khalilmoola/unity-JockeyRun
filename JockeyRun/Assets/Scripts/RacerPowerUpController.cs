@@ -31,67 +31,94 @@ public class RacerPowerUpController : MonoBehaviour
 
         if (isPlayer)
         {
-            if (Input.GetKeyDown(activateKey)) Activate();
+            if (Input.GetKeyDown(activateKey))
+            {
+                Activate();
+            }
         }
         else
         {
-            
-            if (Random.Range(0f, 100f) < 1f) // activate the power up with a delay 
+            if (Random.Range(0f, 100f) < 1f)
             {
                 Activate();
             }
         }
     }
 
-
     public void GivePowerUp(PowerUpType type)
     {
         equippedPowerUp = type;
         hasPowerUp = true;
+
+        if (isPlayer && PowerUpUIManager.Instance != null)
+        {
+            PowerUpUIManager.Instance.ShowPowerUp(type);
+        }
     }
 
-    //check which entity to apply it to 
     public void Activate()
     {
         if (!hasPowerUp) return;
 
-        if (player != null) ApplyToPlayer(player);
-        else if (ai != null) ApplyToAI(ai);
+        if (player != null)
+        {
+            ApplyToPlayer(player);
+        }
+        else if (ai != null)
+        {
+            ApplyToAI(ai);
+        }
 
         hasPowerUp = false;
+
+        if (isPlayer && PowerUpUIManager.Instance != null)
+        {
+            PowerUpUIManager.Instance.HidePowerUp();
+        }
     }
-    
-    //logic for the player 
+
     private void ApplyToPlayer(HorsePlayer p)
     {
         switch (equippedPowerUp)
         {
             case PowerUpType.SpeedBoost:
                 p.ApplySpeedMultiplier(speedBoostMultiplier, speedBoostDurationSeconds);
+
+                SpeedBoostEffect playerEffect = p.GetComponent<SpeedBoostEffect>();
+                if (playerEffect != null)
+                {
+                    playerEffect.PlayEffect(speedBoostDurationSeconds);
+                }
+
                 break;
 
             case PowerUpType.Shield:
                 p.ApplyShield(shieldDurationSeconds);
                 break;
 
-
             case PowerUpType.Projectile:
                 FireProjectile();
                 break;
+
             case PowerUpType.FreezeTrap:
-                //if they hit a trap, then they take damage 
                 p.TakeFreeze(2.0f);
                 break;
         }
     }
 
-    //logic for the ai 
     private void ApplyToAI(HorseAIRacer a)
     {
         switch (equippedPowerUp)
         {
             case PowerUpType.SpeedBoost:
                 a.ApplySpeedMultiplier(speedBoostMultiplier, speedBoostDurationSeconds);
+
+                SpeedBoostEffect aiEffect = a.GetComponent<SpeedBoostEffect>();
+                if (aiEffect != null)
+                {
+                    aiEffect.PlayEffect(speedBoostDurationSeconds);
+                }
+
                 break;
 
             case PowerUpType.Shield:
@@ -101,21 +128,25 @@ public class RacerPowerUpController : MonoBehaviour
             case PowerUpType.Projectile:
                 FireProjectile();
                 break;
+
             case PowerUpType.FreezeTrap:
                 a.TakeFreeze(2.0f);
                 break;
         }
     }
 
-    //logic for shooting the projectile, from the player to the AI 
     private void FireProjectile()
     {
         if (projectilePrefab == null) return;
 
-        Vector3 spawnPos = projectileSpawnPoint != null ? projectileSpawnPoint.position : transform.position;
+        Vector3 spawnPos = projectileSpawnPoint != null
+            ? projectileSpawnPoint.position
+            : transform.position;
+
         GameObject go = Instantiate(projectilePrefab, spawnPos, Quaternion.identity);
 
         Projectile projectile = go.GetComponent<Projectile>();
+
         if (projectile != null)
         {
             projectile.owner = gameObject;
@@ -125,7 +156,11 @@ public class RacerPowerUpController : MonoBehaviour
         else
         {
             Rigidbody2D rb = go.GetComponent<Rigidbody2D>();
-            if (rb != null) rb.velocity = Vector2.right * projectileSpeed;
+
+            if (rb != null)
+            {
+                rb.velocity = Vector2.right * projectileSpeed;
+            }
         }
     }
 }
