@@ -11,6 +11,13 @@ public class BoostPad : MonoBehaviour
         if (player != null)
         {
             player.ApplySpeedMultiplier(boostMultiplier, boostDuration);
+
+            SpeedBoostEffect effect = other.GetComponent<SpeedBoostEffect>();
+            if (effect != null)
+            {
+                effect.PlayEffect(boostDuration);
+            }
+
             return;
         }
 
@@ -18,6 +25,13 @@ public class BoostPad : MonoBehaviour
         if (aiRacer != null)
         {
             aiRacer.ApplySpeedMultiplier(boostMultiplier, boostDuration);
+
+            SpeedBoostEffect effect = other.GetComponent<SpeedBoostEffect>();
+            if (effect != null)
+            {
+                effect.PlayEffect(boostDuration);
+            }
+
             return;
         }
     }
