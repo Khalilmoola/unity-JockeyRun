@@ -7,20 +7,22 @@ public class MapController : MonoBehaviour
     {   
         AudioManager.Instance.PlaySfx(AudioEvent.MenuButton);
 
-        SceneManager.LoadScene("khalilMap1"); 
+        SceneManager.LoadScene("Mong Kok Map"); 
+        
+
     }
 
     public void GoToMapTST()
     {   
         AudioManager.Instance.PlaySfx(AudioEvent.MenuButton);
 
-        SceneManager.LoadScene("khalilMap1"); 
+        SceneManager.LoadScene("TST Map"); 
     }
     public void GoToMapMongKok()
     {
         AudioManager.Instance.PlaySfx(AudioEvent.MenuButton);
 
-        SceneManager.LoadScene("khalilMap1"); 
+        SceneManager.LoadScene("Mong Kok Map"); 
     }
     
     public void GoToMainMenu()

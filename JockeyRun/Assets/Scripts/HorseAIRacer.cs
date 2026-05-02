@@ -144,11 +144,14 @@ void Update()
     }
 
     private bool ShouldJump()
-    {
-        Vector2 origin = new Vector2(transform.position.x, transform.position.y) + Vector2.up * obstacleDetectHeightOffset;
-        RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.right, obstacleDetectDistance, obstacleMask);
-        return hit.collider != null;
-    }
+{
+    Vector2 origin = new Vector2(transform.position.x, transform.position.y) + Vector2.up * obstacleDetectHeightOffset;
+
+    Debug.DrawRay(origin, Vector2.right * obstacleDetectDistance, Color.red);
+
+    RaycastHit2D hit = Physics2D.Raycast(origin, Vector2.right, obstacleDetectDistance, obstacleMask);
+    return hit.collider != null;
+}
 
     //ai raceer jump logic
     private void TryJump()
