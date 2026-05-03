@@ -59,8 +59,7 @@ public class RaceManager : MonoBehaviour
             {
                 AudioManager.Instance.PlaySfx(AudioEvent.MenuButton);
             }
-            
-            SceneManager.LoadScene("Main Menu");
+            ReturnToMenu();
         }
     }
 
@@ -82,5 +81,9 @@ public class RaceManager : MonoBehaviour
         Invoke("ReturnToMenu", 10f); // Wait 10 seconds then leave
     }
 
-    void ReturnToMenu() => SceneManager.LoadScene("Map Menu");
+    void ReturnToMenu(){
+        AudioManager.Instance.StopLoop(AudioEvent.RunningLoop);
+        AudioManager.Instance.StopMusic();
+        SceneManager.LoadScene("Map Menu");
+    }
 }

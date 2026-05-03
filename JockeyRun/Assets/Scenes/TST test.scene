@@ -157,6 +157,7 @@ MonoBehaviour:
   countdownText: {fileID: 1121014911}
   timerText: {fileID: 1295055404}
   playerScript: {fileID: 1630269541}
+  aiRacers: []
 --- !u!4 &154168801
 Transform:
   m_ObjectHideFlags: 0
@@ -656,6 +657,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   player: {fileID: 1630269545}
   xOffset: 5
+  yOffset: 2
 --- !u!1 &635248993
 GameObject:
   m_ObjectHideFlags: 0
@@ -986,7 +988,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1956598145
-  m_SortingLayer: 2
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
@@ -1162,6 +1164,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 89bae446791024425b71599a0d672c9d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  totalLaps: 2
+  startPoint: {fileID: 0}
+  triggerCooldown: 0.5
 --- !u!1 &1087410825
 GameObject:
   m_ObjectHideFlags: 0
@@ -1292,7 +1297,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1584051009
-  m_SortingLayer: 1
+  m_SortingLayer: -1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -1698,7 +1703,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: -1956598145
-  m_SortingLayer: 2
+  m_SortingLayer: 1
   m_SortingOrder: 0
   m_Sprite: {fileID: 7482667652216324306, guid: 311925a002f4447b3a28927169b83ea6, type: 3}
   m_Color: {r: 0, g: 0, b: 0, a: 1}
@@ -1763,6 +1768,9 @@ MonoBehaviour:
   jumpForce: 6
   maxJumps: 3
   canMove: 0
+  knockbackForce: {x: -10, y: 5}
+  knockbackStunSeconds: 0.5
+  damageInvulnerabilitySeconds: 0.75
 --- !u!50 &1630269542
 Rigidbody2D:
   serializedVersion: 4
